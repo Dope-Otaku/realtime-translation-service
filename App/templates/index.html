@@ -6,6 +6,8 @@
     <title>Translation Service</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- <link rel="stylesheet" href="style.css"> ok! so i guess we can not link a css like this we need to use this  directly in here -->
+
+    <!-- so we need to import css like this -->
      <style>
          body, html {
       height: 100%;
@@ -58,18 +60,8 @@
      </style>
 </head>
 <body>
-    <!-- <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
-        <a class="navbar-navbar" href="#">translation Service live .......</a>
-
-        <div class="container">
-            <h1 class="text-center mt-4">Translation Service</h1>
-
-            <form id='translationform'>
-                <label for="textToTranslate()">Text to translate</label>
-                <textarea class="form-control" id="textToTranslate" rows="4" placeholder="Enter Text here...."></textarea>
-            </form>
-        </div>
-    </nav> -->
+    
+    <!-- navbar setup -->
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
             <a href="#" class="navbar-brand mx-auto">Translator Service</a>
@@ -77,20 +69,75 @@
         </div>
     </nav>
 
-
-
-
-    <!-- <nav class="navbar navbar-expand-lg navbar-dark">
-        <div class="container">
-          <a class="navbar-brand mx-auto" href="#">Translator Service</a>
-          <div class="navbar-text text-light">
-            AlphaLoops TASK-Exercise
-          </div>
+    <!-- main content resides here -->
+    <div class="content">
+        <div class="container form-container">
+            <div class="form-box">
+            <label for="text" class="form-label">Text to Translate</label>
+            <textarea id="text" class="form-control" rows="10"></textarea>
+            </div>
+            <div class="form-box">
+            <label for="languages" class="form-label">Languages</label>
+            <input id="languages" class="form-control" type="text" placeholder="e.g., english, german, russian">
+            <small class="form-text text-muted">Write the languages you want to translate your text to, separated by commas.</small>
+            </div>
+            <div class="btn-container">
+            <button class="btn btn-primary" onclick="translateText()">Translate</button>
+            </div>
         </div>
-      </nav> -->
-        
+        </div>
+
+        <!-- just footer part -->
+    <div class="footer">
+        &copy; 2024 Dope Labs
+    </div>
+
+            
+    <script>
+        async function translateText(){
+
+            //extract the text and languages from the form 
+            const text_for_translation = document.getElementById('text').value;
+            const languages_chosen = document.getElementById('languages').value;
+
+            // prepare the payload
+            const payload = {
+                text: text_for_translation,
+                languages: languages_chosen
+            }
+
+            try{
+                //execute the post request to the translation endpoint
+                const response = await fetch("http://localhost:8000/translate", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                })
+
+                // Check if the response is valid!
+                if(!response.ok){
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                // Parse and handle the response 
+                const result = await response.json();
+                alert('Translation request submitted -> ID: ' + result.id);
+                window.location.href = '/translate/' + result.id;
+            }
+            catch(error) {
+                console.log("Error: ", error);
+                alert("Failed to submit request!")
+            }
+            finally{
+                console.log("Dope Lab Productions!")
+            }
+
+        } 
+    </script>
 
 
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
