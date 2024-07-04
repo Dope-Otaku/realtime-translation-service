@@ -2,5 +2,5 @@
 
 ## Tools
 
-[ ] - FastApi
-[ ] - GPT - 4
+[*] - FastApi
+[*] - GPT - 4
